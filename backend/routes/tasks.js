@@ -36,17 +36,12 @@ router.get('/:token', async (req, res) => {
     const userToken = req.params.token;
 
     try {
-        const user = await User.findOne({ token: userToken }); // Corrected field name
-
+        const user = await User.findOne({ token: userToken });
         if (!user) {
             return res.status(404).json({ result: false, error: 'User not found' });
         }
 
-        const tasks = [];
-        for (const taskId of user.tasks) {
-            const userTask = await Task.findById(taskId);
-            tasks.push(userTask);
-        }
+        const tasks = await Task.find({ taskUserToken: user.token });
 
         res.json({ result: true, taskdata: tasks });
     } catch (error) {

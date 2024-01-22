@@ -6,6 +6,7 @@ const usersSchema = mongoose.Schema({
     password: String,
     token: { type: String, ref: 'users' },
     profilePicture: String,
+    tasks: [{ type: String, ref: 'tasks' }]
 });
 
 const User = mongoose.model('users', usersSchema)
