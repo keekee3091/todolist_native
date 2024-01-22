@@ -51,7 +51,7 @@ export default function SignUpScreen({ navigation, closeModal }) {
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     style={styles.innerContainer}
                 >
-                    <Text style={styles.modalTitle}>Signup</Text>
+                    <Text style={styles.modalTitle}>Sign up</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Username"
@@ -71,8 +71,13 @@ export default function SignUpScreen({ navigation, closeModal }) {
                         value={password}
                         onChangeText={setPassword}
                     />
-                    <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                        <Text style={styles.buttonText}>Signup</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            handleSignUp();
+                            navigation.navigate('TabNavigator');
+                        }}>
+                        <Text style={styles.buttonText}>Sign up</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>
                         <Text style={styles.linkText}>Cancel</Text>

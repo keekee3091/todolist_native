@@ -13,7 +13,7 @@ import {
 import SigninScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
 
     const [signUpModalVisible, setSignUpModalVisible] = useState(false)
     const [signInModalVisible, setSignInModalVisible] = useState(false)

@@ -50,7 +50,7 @@ export default function SigninScreen({ navigation, closeModal }) {
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                     style={styles.innerContainer}
                 >
-                    <Text style={styles.modalTitle}>Signin</Text>
+                    <Text style={styles.modalTitle}>Sign in</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Email or Username"
@@ -64,8 +64,13 @@ export default function SigninScreen({ navigation, closeModal }) {
                         value={password}
                         onChangeText={setPassword}
                     />
-                    <TouchableOpacity style={styles.button} onPress={handleSignin}>
-                        <Text style={styles.buttonText}>Signin</Text>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            handleSignin();
+                            navigation.navigate('TabNavigator');
+                        }}>
+                        <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>
                         <Text style={styles.linkText}>Cancel</Text>
