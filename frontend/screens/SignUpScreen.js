@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+} from 'react-native';
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen({ navigation, closeModal }) {
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -29,50 +39,70 @@ export default function SignUpScreen({ navigation }) {
             })
     }
 
+
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    };
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Signup Screen</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                <Text style={styles.buttonText}>Signup</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signin')}>
-                <Text style={styles.linkText}>Already have an account? Sign In</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.modalContent}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.innerContainer}
+                >
+                    <Text style={styles.modalTitle}>Signup</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Username"
+                        value={username}
+                        onChangeText={setUsername}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                        <Text style={styles.buttonText}>Signup</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={closeModal}>
+                        <Text style={styles.linkText}>Cancel</Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    modalContent: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    title: {
+    innerContainer: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
         fontSize: 24,
         marginBottom: 20,
     },
     input: {
-        width: '80%',
+        width: '100%',
         marginTop: 10,
         padding: 10,
         borderBottomColor: '#ccc',
@@ -91,5 +121,6 @@ const styles = StyleSheet.create({
     linkText: {
         marginTop: 20,
         color: '#3498db',
+        marginBottom: 20,
     },
 });

@@ -7,8 +7,11 @@ import {
     Text,
     TouchableOpacity,
     Modal,
+    TouchableWithoutFeedback,
     View
 } from 'react-native';
+import SigninScreen from './SignInScreen';
+import SignUpScreen from './SignUpScreen';
 
 export default function HomeScreen({ navigation }) {
 
@@ -23,54 +26,52 @@ export default function HomeScreen({ navigation }) {
         setSignInModalVisible(!signInModalVisible)
     }
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
+    };
+
     return (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <Image style={styles.image} source={require('../assets/to-do-list.jpeg')} />
-            <Text style={styles.title}>Welcome to Todolist</Text>
-            <TouchableOpacity onPress={toggleSignUpModal} style={styles.button} activeOpacity={0.8}>
-                <Text style={styles.textButton}>Sign Up</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleSignInModal} style={styles.button} activeOpacity={0.8}>
-                <Text style={styles.textButton}>Sign In</Text>
-            </TouchableOpacity>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={signUpModalVisible}
-                onRequestClose={toggleSignUpModal}
-            >
-                <View style={styles.modalContent}>
-                    {/* Content for Signup Modal */}
-                    {/* ... */}
-                    <TouchableOpacity onPress={toggleSignUpModal}>
-                        <Text>Close Modal</Text>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.container}>
+                <KeyboardAvoidingView style={styles.innerContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                    <Image style={styles.image} source={require('../assets/to-do-list.jpeg')} />
+                    <Text style={styles.title}>Welcome to Todolist</Text>
+                    <TouchableOpacity onPress={toggleSignUpModal} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textButton}>Sign Up</Text>
                     </TouchableOpacity>
-                </View>
-            </Modal>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={signInModalVisible}
-                onRequestClose={toggleSignInModal}
-            >
-                <View style={styles.modalContent}>
-                    {/* Content for Signin Modal */}
-                    {/* ... */}
-                    <TouchableOpacity onPress={toggleSignInModal}>
-                        <Text>Close Modal</Text>
+                    <TouchableOpacity onPress={toggleSignInModal} style={styles.button} activeOpacity={0.8}>
+                        <Text style={styles.textButton}>Sign In</Text>
                     </TouchableOpacity>
-                </View>
-            </Modal>
-        </KeyboardAvoidingView >
+
+                    <Modal
+                        animationType="slide"
+                        visible={signUpModalVisible}
+                        onRequestClose={toggleSignUpModal}
+                    >
+                        <SignUpScreen closeModal={toggleSignUpModal} />
+                    </Modal>
+
+                    <Modal
+                        animationType="slide"
+                        visible={signInModalVisible}
+                        onRequestClose={toggleSignInModal}
+                    >
+                        <SigninScreen closeModal={toggleSignInModal} />
+                    </Modal>
+                </KeyboardAvoidingView >
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
+    },
+    innerContainer: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -109,5 +110,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalTitle: {
+        fontSize: 24,
+        color: '#ffffff',
+        marginBottom: 20,
     },
 });

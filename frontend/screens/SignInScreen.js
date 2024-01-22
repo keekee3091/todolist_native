@@ -1,52 +1,101 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+} from 'react-native';
 
-export default function SigninScreen({ navigation }) {
+export default function SigninScreen({ navigation, closeModal }) {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignin = () => {
+        fetch('http://localhost:3000/users/signin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                identifier,
+                password,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    console.log('Signin successful');
+                } else {
+                    console.error('Signin failed:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error during signin:', error);
+            });
+    };
 
+    const dismissKeyboard = () => {
+        Keyboard.dismiss();
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Signin Screen</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Email or Username"
-                value={identifier}
-                onChangeText={setIdentifier}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleSignin}>
-                <Text style={styles.buttonText}>Signin</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableWithoutFeedback onPress={dismissKeyboard}>
+            <View style={styles.modalContent}>
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={styles.innerContainer}
+                >
+                    <Text style={styles.modalTitle}>Signin</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email or Username"
+                        value={identifier}
+                        onChangeText={setIdentifier}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    <TouchableOpacity style={styles.button} onPress={handleSignin}>
+                        <Text style={styles.buttonText}>Signin</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={closeModal}>
+                        <Text style={styles.linkText}>Cancel</Text>
+                    </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </View>
+        </TouchableWithoutFeedback>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
+    modalContent: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    title: {
+    innerContainer: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
         fontSize: 24,
         marginBottom: 20,
     },
     input: {
-        width: '80%',
+        width: '100%',
         marginTop: 10,
         padding: 10,
         borderBottomColor: '#ccc',
@@ -65,6 +114,7 @@ const styles = StyleSheet.create({
     linkText: {
         marginTop: 20,
         color: '#3498db',
+        marginBottom: 20,
     },
 });
 
