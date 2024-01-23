@@ -30,6 +30,11 @@ export default function SigninScreen({ navigation, closeModal }) {
             .then(data => {
                 if (data.result) {
                     console.log('Signin successful');
+                    if (navigation) {
+                        navigation.navigate('TabNavigator');
+                    } else {
+                        console.error('Navigation object is undefined');
+                    }
                 } else {
                     console.error('Signin failed:', data.error);
                 }
@@ -54,22 +59,21 @@ export default function SigninScreen({ navigation, closeModal }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Email or Username"
+                        placeholderTextColor="#999"
                         value={identifier}
                         onChangeText={setIdentifier}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Password"
+                        placeholderTextColor="#999"
                         secureTextEntry
                         value={password}
                         onChangeText={setPassword}
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => {
-                            handleSignin();
-                            navigation.navigate('TabNavigator');
-                        }}>
+                        onPress={() => { handleSignin(); }}>
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>

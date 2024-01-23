@@ -33,12 +33,19 @@ export default function SignUpScreen({ navigation, closeModal }) {
             .then(data => {
                 if (data.result) {
                     console.log('Signup successful')
+                    if (navigation) {
+                        navigation.navigate('TabNavigator');
+                    } else {
+                        console.error('Navigation object is undefined');
+                    }
                 } else {
-                    console.error('You fucked up', data.error)
+                    console.error('Signup failed:', data.error);
                 }
             })
-    }
-
+            .catch(error => {
+                console.error('Error during signup:', error);
+            });
+    };
 
     const dismissKeyboard = () => {
         Keyboard.dismiss();
@@ -55,28 +62,28 @@ export default function SignUpScreen({ navigation, closeModal }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Username"
+                        placeholderTextColor="#999"
                         value={username}
                         onChangeText={setUsername}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Email"
+                        placeholderTextColor="#999"
                         value={email}
                         onChangeText={setEmail}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Password"
+                        placeholderTextColor="#999"
                         secureTextEntry
                         value={password}
                         onChangeText={setPassword}
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => {
-                            handleSignUp();
-                            navigation.navigate('TabNavigator');
-                        }}>
+                        onPress={() => { handleSignUp(); }}>
                         <Text style={styles.buttonText}>Sign up</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>
