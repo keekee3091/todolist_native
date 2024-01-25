@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
 import {
     View,
     Text,
@@ -10,13 +11,18 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function SigninScreen({ navigation, closeModal }) {
+export default function SigninScreen({ closeModal }) {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigation = useNavigation()
+
+    const dispatch = useDispatch()
+
     const handleSignin = () => {
-        fetch('http://localhost:3000/users/signin', {
+        fetch('http://192.168.1.44:3000/users/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,6 +35,7 @@ export default function SigninScreen({ navigation, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
+                    dispatch(loginUser({ email, token, username }));
                     console.log('Signin successful');
                     if (navigation) {
                         navigation.navigate('TabNavigator');
@@ -73,7 +80,7 @@ export default function SigninScreen({ navigation, closeModal }) {
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => { handleSignin(); }}>
+                        onPress={() => { handleSignin(); closeModal() }}>
                         <Text style={styles.buttonText}>Sign in</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>

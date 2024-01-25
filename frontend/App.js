@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -5,6 +6,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from './screens/HomeScreen';
 import MainScreen from './screens/MainScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import SignUpScreen from './screens/SignUpScreen';
+import SigninScreen from './screens/SignInScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -19,7 +22,7 @@ const TabNavigator = () => {
           if (route.name === 'Profile') {
             iconName = 'users-solid';
           } else if (route.name === 'Main') {
-            iconName = 'home-regular';
+            iconName = 'map-pin ';
           }
 
           return <FontAwesome name={iconName} size={size} color={color} />;
@@ -42,6 +45,8 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name='TabNavigator' component={TabNavigator} />
+        <Stack.Screen name='SignUp' component={SignUpScreen} />
+        <Stack.Screen name='SignIn' component={SigninScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

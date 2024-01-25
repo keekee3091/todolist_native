@@ -69,6 +69,28 @@ router.post('/signin', (req, res) => {
   });
 });
 
+// Get user by token
+router.get('/getUserByToken/:token', async (req, res) => {
+  try {
+    const userToken = req.params.token;
+
+    // Find the user by the provided token
+    const user = await User.findOne({ token: userToken });
+
+    if (!user) {
+      return res.status(404).json({ result: false, error: 'User not found' });
+    }
+
+    // Remove sensitive information (e.g., password) before sending the response
+    const { password, ...userData } = user._doc;
+
+    res.json({ result: true, userData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ result: false, error: 'Internal Server Error' });
+  }
+});
+
 
 
 

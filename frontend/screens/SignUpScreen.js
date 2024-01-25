@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     View,
     Text,
@@ -10,15 +11,21 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { loginUser } from '../reducer/user';
 
-export default function SignUpScreen({ navigation, closeModal }) {
+export default function SignUpScreen({ closeModal }) {
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const navigation = useNavigation()
+
+    const dispatch = useDispatch()
+
     const handleSignUp = () => {
-        fetch('http://localhost:3000/users/signup', {
+        fetch('http://192.168.1.44:3000/users/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,6 +39,7 @@ export default function SignUpScreen({ navigation, closeModal }) {
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
+                    dispatch(loginUser({ email, token, username }))
                     console.log('Signup successful')
                     if (navigation) {
                         navigation.navigate('TabNavigator');
@@ -83,7 +91,7 @@ export default function SignUpScreen({ navigation, closeModal }) {
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => { handleSignUp(); }}>
+                        onPress={() => { handleSignUp(); closeModal() }}>
                         <Text style={styles.buttonText}>Sign up</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={closeModal}>
