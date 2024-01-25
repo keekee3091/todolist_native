@@ -40,6 +40,10 @@ export default function MainScreen({ navigation }) {
             })
     }, [isTaskAdded])
 
+    const taskAdded = () => {
+        setIsTaskAdded(!isTaskAdded);
+        closeModal();
+    }
 
     const postNewTask = () => {
         fetch('http://192.168.1.44:3000/tasks/newTask', {
@@ -83,6 +87,14 @@ export default function MainScreen({ navigation }) {
                 console.error('Error deleting task:', error);
             });
     };
+
+    function openModal() {
+        setToggleTaskModal(true)
+    }
+
+    function closeModal() {
+        setToggleTaskModal(false)
+    }
 
     const dismissKeyboard = () => {
         Keyboard.dismiss()
