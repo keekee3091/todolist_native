@@ -38,35 +38,34 @@ router.post('/signup', (req, res) => {
 
 //Route to log in
 router.post('/signin', (req, res) => {
-  const { email, username, password, token } = req.body;
+  const { email, username, password } = req.body;
 
   if (!checkBody(req.body, ['password'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
-    return;
+    return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
   if (!email && !username) {
-    res.json({ result: false, error: 'Email or username is required for login' });
-    return;
+    return res.json({ result: false, error: 'Email or username is required for login' });
   }
 
   const query = { $or: [{ email }, { username }] };
 
-  User.findOne(query).then(identifierData => {
-    if (identifierData !== null) {
-      if (bcrypt.compareSync(password, identifierData.password)) {
-        if (token === identifierData.token) {
-          res.json({ result: true, token: identifierData.token });
+  User.findOne(query)
+    .then((user) => {
+      if (user !== null) {
+        if (bcrypt.compareSync(password, user.password)) {
+          res.json({ result: true, token: user.token });
         } else {
-          res.json({ result: false, error: 'Invalid token' });
+          res.json({ result: false, error: 'Invalid password' });
         }
       } else {
-        res.json({ result: false, error: 'Invalid password' });
+        res.json({ result: false, error: 'User not found' });
       }
-    } else {
-      res.json({ result: false, error: 'User not found' });
-    }
-  });
+    })
+    .catch((error) => {
+      console.error('Error during signin:', error);
+      res.status(500).json({ result: false, error: 'Internal Server Error' });
+    });
 });
 
 // Get user by token

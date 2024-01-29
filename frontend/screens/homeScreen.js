@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     Modal,
     TouchableWithoutFeedback,
-    View
+    View,
+    Keyboard
 } from 'react-native';
 import SigninScreen from './SignInScreen';
 import SignUpScreen from './SignUpScreen';

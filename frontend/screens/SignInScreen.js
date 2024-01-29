@@ -35,7 +35,7 @@ export default function SigninScreen({ closeModal }) {
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    dispatch(loginUser({ email, token, username }));
+                    dispatch(loginUser({ email, username }));
                     console.log('Signin successful');
                     if (navigation) {
                         navigation.navigate('TabNavigator');

@@ -61,6 +61,7 @@ export default function MainScreen({ navigation }) {
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
+                    taskAdded()
                     console.log(data.result, 'Task posted')
                 } else {
                     console.error('Task failed:', data.error)
@@ -103,7 +104,7 @@ export default function MainScreen({ navigation }) {
     return (
         <View>
             <Text>Main Screen</Text>
-            <Button title="Add New Task" onPress={navigateToAddTaskScreen} />
+            <Button title="Add New Task" onPress={openModal} />
 
             <FlatList
                 data={tasks}

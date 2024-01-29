@@ -1,4 +1,8 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { Text } from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react'
+import { store, persistor } from './reducer/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -41,14 +45,18 @@ const TabNavigator = () => {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name='TabNavigator' component={TabNavigator} />
-        <Stack.Screen name='SignUp' component={SignUpScreen} />
-        <Stack.Screen name='SignIn' component={SigninScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name='TabNavigator' component={TabNavigator} />
+            <Stack.Screen name='SignUp' component={SignUpScreen} />
+            <Stack.Screen name='SignIn' component={SigninScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider >
   );
 }
 

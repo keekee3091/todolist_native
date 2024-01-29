@@ -39,6 +39,7 @@ export default function SignUpScreen({ closeModal }) {
             .then(response => response.json())
             .then(data => {
                 if (data.result) {
+                    const { email, token, username } = data
                     dispatch(loginUser({ email, token, username }))
                     console.log('Signup successful')
                     if (navigation) {
