@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux'
 import {
     View,
@@ -12,30 +12,44 @@ import {
     Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { loginUser } from '../reducer/user';
 
 export default function SigninScreen({ closeModal }) {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
+    const [isSignIn, setIsSignIn] = useState(false)
 
     const navigation = useNavigation()
-
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        if (isSignIn) {
+            handleSignin();
+        }
+    }, [isSignIn])
+
     const handleSignin = () => {
+        setIsSignIn(false);
+
+        console.log('Submitting:', identifier, password);
+
         fetch('http://192.168.1.44:3000/users/signin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                identifier,
+                email: identifier,
+                username: identifier,
                 password,
             }),
         })
             .then(response => response.json())
             .then(data => {
+                console.log('Response:', data);
+
                 if (data.result) {
-                    dispatch(loginUser({ email, username }));
+                    dispatch(loginUser({ username, token: data.token }));
                     console.log('Signin successful');
                     if (navigation) {
                         navigation.navigate('TabNavigator');
@@ -43,13 +57,14 @@ export default function SigninScreen({ closeModal }) {
                         console.error('Navigation object is undefined');
                     }
                 } else {
-                    console.error('Signin failed:', data.error);
+                    console.log('Signin failed:', data.error);
                 }
             })
             .catch(error => {
                 console.error('Error during signin:', error);
             });
     };
+
 
     const dismissKeyboard = () => {
         Keyboard.dismiss();
