@@ -36,8 +36,8 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name='Main' component={MainScreen} />
+      <Tab.Screen name='Profile' component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
