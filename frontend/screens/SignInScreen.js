@@ -39,17 +39,22 @@ export default function SigninScreen({ closeModal }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email: identifier,
-                username: identifier,
+                identifier,
                 password,
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Full Response:', response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 console.log('Response:', data);
 
                 if (data.result) {
-                    dispatch(loginUser({ username, token: data.token }));
+                    dispatch(loginUser({ identifier, token: data.token }));
                     console.log('Signin successful');
                     if (navigation) {
                         navigation.navigate('TabNavigator');

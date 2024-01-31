@@ -38,17 +38,17 @@ router.post('/signup', (req, res) => {
 
 //Route to log in
 router.post('/signin', (req, res) => {
-  const { email, username, password } = req.body;
+  const { identifier, password } = req.body;
 
   if (!checkBody(req.body, ['password'])) {
     return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
-  if (!email && !username) {
+  if (!identifier) {
     return res.json({ result: false, error: 'Email or username is required for login' });
   }
 
-  const query = { $or: [{ email }, { username }] };
+  const query = { $or: [{ email: identifier }, { username: identifier }] };
 
   User.findOne(query)
     .then((user) => {

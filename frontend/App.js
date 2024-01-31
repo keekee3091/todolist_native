@@ -24,9 +24,9 @@ const TabNavigator = () => {
           let iconName = '';
 
           if (route.name === 'Profile') {
-            iconName = 'users-solid';
+            iconName = 'user';
           } else if (route.name === 'Main') {
-            iconName = 'map-pin'; // Remove the space here
+            iconName = 'home'; // Remove the space here
           }
 
           return <FontAwesome name={iconName} size={size} color={color} />;
