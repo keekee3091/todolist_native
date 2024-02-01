@@ -54,7 +54,7 @@ router.post('/signin', (req, res) => {
     .then((user) => {
       if (user !== null) {
         if (bcrypt.compareSync(password, user.password)) {
-          res.json({ result: true, token: user.token });
+          res.json({ result: true, token: user.token, username: user.username });
         } else {
           res.json({ result: false, error: 'Invalid password' });
         }

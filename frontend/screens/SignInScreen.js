@@ -54,8 +54,8 @@ export default function SigninScreen({ closeModal }) {
                 console.log('Response:', data);
 
                 if (data.result) {
-                    dispatch(loginUser({ identifier, token: data.token, username: data.username }));
-                    console.log('Signin successful');
+                    dispatch(loginUser({ token: data.token, username: data.username }));
+                    console.log('Signin successful, Username:', data.username);
                     if (navigation) {
                         navigation.navigate('TabNavigator');
                     } else {
